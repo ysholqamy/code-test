@@ -7,27 +7,40 @@ We need an http server that will accept any post request (json) from muliple cli
 For the js part of the test please feel free to use any libraries that may help you **but do not use any non standard library packages for the Go service**.
 
 ## Frontend (JS)
-Include javascript into the index.html (supplied) that captures and posts every time the following events happens:
+Include javascript into the index.html (supplied) that captures and posts every time on of the following events happens; this means you will be posting multiple time per visitor. Assume only 1 resize occurs.
 
   - if the screen resizes, the before and after dimensions
   - copy & paste (for each field)
-  - time taken for 1st character to clicking the submit button
+  - time taken from the 1st character typed to clicking the submit button
 
-### Example JSON Request
+### Example JSON Requests
 ```
 {
   "eventType": "copyAndPaste",
   "websiteUrl": "https://ravelin.com",
   "sessionId": "123123-123123-123123123",
-  "formId": true,
+  "pasted": true,
+  "formId": "inputCardNumber"
 }
+
+{
+  "eventType": "timeTaken",
+  "websiteUrl": "https://ravelin.com",
+  "sessionId": "123123-123123-123123123",
+  "time": 72, // seconds
+}
+
+...
+
 ```
 
 ## Backend (Go)
 1. Build a go binary with an http server
 2. Accept post requests (json format)
 3. Map the json requests to relevant sections of the data struct
-4. Only print the struct when it is complete (i.e. form submit button has been clicked)
+4. Print the struct at each stage of it's construction. 
+5. Also print the struct when it is complete (i.e. form submit button has been clicked)
+6. Use go routines and channel where appropriate
 
 ### Go Struct
 ```
