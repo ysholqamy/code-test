@@ -25,8 +25,8 @@ Include javascript into the index.html (supplied) that captures and posts every 
 type Data struct {
 	websiteUrl         string
 	sessionId          string
-	resizeFrom         Dimention
-	resizeTo           Dimention
+	resizeFrom         Dimension
+	resizeTo           Dimension
 	copyAndPaste       map[string]bool // map[fieldId]true
 	formCompletionTime int // Seconds
 }
