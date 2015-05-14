@@ -7,7 +7,7 @@ We need an http server that will accept any post request (json) from muliple cli
 For the js part of the test please feel free to use any libraries that may help you **but do not use any non standard library packages for the Go service**.
 
 ## Frontend (JS)
-Include javascript into the index.html (supplied) that captures and posts every time the following event happens:
+Include javascript into the index.html (supplied) that captures and posts every time the following events happens:
 
   - if the screen resizes, the before and after dimensions
   - copy & paste (for each field)
