@@ -38,8 +38,8 @@ Include javascript into the index.html (supplied) that captures and posts data e
 1. Build a go binary with an http server
 2. Accept post requests (json format)
 3. Map the json requests to relevant sections of the data struct
-4. Print the struct at each stage of it's construction. 
-5. Also print the struct when it is complete (i.e. form submit button has been clicked)
+4. Print the struct at trace level for each stage of it's construction. 
+5. Also print the struct at info level when it is complete (i.e. form submit button has been clicked)
 6. Use go routines and channel where appropriate
 
 ### Go Struct
