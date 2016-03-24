@@ -21,9 +21,6 @@ func NewManager() *Manager {
 
 //findOrCreate should find the eventsData with the gived sid. a new eventsData will be created if not found.
 func (m *Manager) findOrCreate(sid, url string) *eventsData {
-	m.Lock()
-	defer m.Unlock()
-
 	ev, ok := m.eventsStore[sid]
 
 	if !ok {
@@ -59,4 +56,12 @@ func (m *Manager) RegisterEvent(decoder EventDecoder, ch chan Result) {
 	ev := m.findOrCreate(sid, url)
 
 	ch <- ev.populate(event, sid)
+
+	// if eventType is timeTaken than we should clear the data for this session
+	t, ok := event["eventType"].(string)
+
+	// no need to handle error if occured. ev.populate should handle and propagate the error.
+	if ok && t == "timeTaken" {
+		m.eventsStore[sid] = newEventsData(url)
+	}
 }
