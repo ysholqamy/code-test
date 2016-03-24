@@ -5,8 +5,8 @@ import "fmt"
 //eventsData describes the events that were captured for a single session
 type eventsData struct {
 	websiteURL         string
-	resizeFrom         *dimension
-	resizeTo           *dimension
+	resizeFrom         dimension
+	resizeTo           dimension
 	copyAndPaste       map[string]bool
 	formCompletionTime int
 }
@@ -22,8 +22,8 @@ type dimension struct {
 }
 
 //newDimension takes dimension as map. i.e. map{"width":"10","height":"10"} and creates a new Dimension
-func newDimension(values map[string]string) *dimension {
-	return &dimension{width: values["width"], height: values["height"]}
+func newDimension(values map[string]interface{}) dimension {
+	return dimension{width: values["width"].(string), height: values["height"].(string)}
 }
 
 // populate takes an event raw data and populates EventsData according to eventType.
@@ -45,8 +45,8 @@ func (ev *eventsData) populate(event map[string]interface{}, sid string) Result 
 		message = fmt.Sprintf("Captured copyAndPaste event for session %s. state: %+v", sid, ev)
 
 	case "resize":
-		ev.resizeFrom = newDimension(event["resizedFrom"].(map[string]string))
-		ev.resizeTo = newDimension(event["resizedTo"].(map[string]string))
+		ev.resizeFrom = newDimension(event["resizeFrom"].(map[string]interface{}))
+		ev.resizeTo = newDimension(event["resizeTo"].(map[string]interface{}))
 		message = fmt.Sprintf("Captured resize event for session %s. state: %+v", sid, ev)
 
 	default:
