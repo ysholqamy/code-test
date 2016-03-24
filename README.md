@@ -1,5 +1,17 @@
 Ravelin Code Test
 =================
+## Usage
+To run the backend httpServer
+```
+cd server && go install && go run server.go
+
+```
+
+To run the client server which can be found at **localhost:8080**
+```
+cd server && go install && go run server.go
+
+```
 
 ## Summary
 We need an http server that will accept any post request (json) from muliple clients' websites. Each request forms part of a struct (for that particular visitor) that will be printed to the terminal when the struct is fully complete. 
