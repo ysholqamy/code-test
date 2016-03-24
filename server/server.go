@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/ysholqamy/code-test/event"
+	"github.com/ysholqamy/code-test/server/event"
 	"log"
 	"math/rand"
 	"net/http"
