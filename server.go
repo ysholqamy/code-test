@@ -15,21 +15,25 @@ import (
 // should be moved to event package as singelton?
 var globalEventManager = event.NewManager()
 
+// Dangerous: binary.PutVarint([]byte, int64) is wicked. decodes int64 into 9 or 10 bytes somehow
 func generateUniqueSessionId() string {
 	rand.Seed(time.Now().UnixNano())
-	const count = 5
-	const intByteSize = 8 // will be using int64
+	const count = 3
+	const intByteSize = 10 // will be using rand int64. int64 can be decoded into 9 bytes so better stay safe. Black magic.
+
 	b := make([]byte, count*intByteSize)
+
 	for i := 0; i < count; i++ {
-		// add random int64 to buffer
-		binary.PutVarint(b, rand.Int63())
+		// add random int64 to slice of buffer
+		begin := i * intByteSize
+		end := (i + 1) * intByteSize
+		binary.PutVarint(b[begin:end], rand.Int63())
 	}
 	// return base64 encoding of the generated buffer
 	return base64.StdEncoding.EncodeToString(b)
 }
 
 func prepareRequest(w http.ResponseWriter, r *http.Request) error {
-	log.Println("preparing request")
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return fmt.Errorf("Only accept POST, got %s", r.Method)
@@ -79,12 +83,12 @@ func handleEventRequest(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	ch := make(chan event.Result)
-
-	log.Println("processing event...")
+	// The following code is just a demonstration of go routines and channels.
 	go globalEventManager.RegisterEvent(decoder, ch)
-	log.Println("done processing...")
+
+	// wait for result
 	result := <-ch
-	log.Println("got result out of channel")
+
 	if result.Error != nil {
 		log.Println(result.Error)
 		w.WriteHeader(http.StatusBadRequest) // or InternalServerError maybe?
