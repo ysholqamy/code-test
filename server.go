@@ -29,7 +29,7 @@ func generateUniqueSessionId() string {
 }
 
 func prepareRequest(w http.ResponseWriter, r *http.Request) error {
-
+	log.Println("preparing request")
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return fmt.Errorf("Only accept POST, got %s", r.Method)
@@ -80,10 +80,11 @@ func handleEventRequest(w http.ResponseWriter, r *http.Request) {
 
 	ch := make(chan event.Result)
 
+	log.Println("processing event...")
 	go globalEventManager.RegisterEvent(decoder, ch)
-
+	log.Println("done processing...")
 	result := <-ch
-
+	log.Println("got result out of channel")
 	if result.Error != nil {
 		log.Println(result.Error)
 		w.WriteHeader(http.StatusBadRequest) // or InternalServerError maybe?
