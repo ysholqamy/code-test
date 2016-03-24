@@ -4,13 +4,11 @@ Ravelin Code Test
 To run the backend httpServer
 ```
 cd server && go install && go run server.go
-
 ```
 
 To run the client server which can be found at **localhost:8080**
 ```
 cd client && go install && go run client.go
-
 ```
 
 ## Summary
